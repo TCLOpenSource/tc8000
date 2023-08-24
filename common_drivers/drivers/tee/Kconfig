@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+config AMLOGIC_TEE
+	tristate "TEE Support for Amlogic"
+	depends on AML_TEE
+	default n
+	help
+	  Amlogic TEE driver
+
+	  Provide TEE APIs and Debug interface in sysfs, depends on the
+	  tee os.

@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+config AMLOGIC_DVB_CONFIG
+	tristate "Amlogic dvb support"
+	default n
+	help
+		amlogic dvb support
+		Y: enable
+		N: disable
+		M: build as module
+
+if AMLOGIC_DVB_CONFIG
+
+config AMLOGIC_DVB_EXTERN
+	bool "Amlogic dvb extern drivers"
+	help
+		Say Y here if you want to support amlogic dvb extern driver.
+
+config AMLOGIC_DVB_DSM
+	bool "AMLOGIC DVB DSM"
+	help
+		Amlogic DVB Descrambler Session Manager
+
+config AMLOGIC_DVB_COMPAT
+	bool "AMLOGIC DVB COMPAT"
+	default n
+	help
+		if define Amlogic define demod or dmx
+		it should define AMLOGIC_DVB_COMPAT
+
+source "$(COMMON_DRIVERS_DIR)/drivers/dvb/aucpu/Kconfig"
+source "$(COMMON_DRIVERS_DIR)/drivers/dvb/smartcard_sc2/Kconfig"
+
+endif
+
+#
+#dvb driver for demux
+#
+config AMLOGIC_DVB_DMX
+	tristate "AMLOGIC DVB DMX"
+	depends on AMLOGIC_TEE
+	help
+		support dmx/dsc driver.

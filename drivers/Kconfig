@@ -1,0 +1,300 @@
+# SPDX-License-Identifier: GPL-2.0
+menu "Device Drivers"
+
+# Keep I/O buses first
+
+source "drivers/amba/Kconfig"
+source "drivers/eisa/Kconfig"
+source "drivers/pci/Kconfig"
+source "drivers/cxl/Kconfig"
+source "drivers/pcmcia/Kconfig"
+source "drivers/rapidio/Kconfig"
+
+
+source "drivers/base/Kconfig"
+
+source "drivers/bus/Kconfig"
+
+source "drivers/connector/Kconfig"
+
+source "drivers/firmware/Kconfig"
+
+source "drivers/gnss/Kconfig"
+
+source "drivers/mtd/Kconfig"
+
+source "drivers/of/Kconfig"
+
+source "drivers/parport/Kconfig"
+
+source "drivers/pnp/Kconfig"
+
+source "drivers/block/Kconfig"
+
+source "drivers/nvme/Kconfig"
+
+source "drivers/misc/Kconfig"
+
+source "drivers/scsi/Kconfig"
+
+source "drivers/ata/Kconfig"
+
+source "drivers/md/Kconfig"
+
+source "drivers/target/Kconfig"
+
+source "drivers/message/fusion/Kconfig"
+
+source "drivers/firewire/Kconfig"
+
+source "drivers/macintosh/Kconfig"
+
+source "drivers/net/Kconfig"
+
+source "drivers/isdn/Kconfig"
+
+# input before char - char/joystick depends on it. As does USB.
+
+source "drivers/input/Kconfig"
+
+source "drivers/char/Kconfig"
+
+source "drivers/i2c/Kconfig"
+
+source "drivers/i3c/Kconfig"
+
+source "drivers/spi/Kconfig"
+
+source "drivers/spmi/Kconfig"
+
+source "drivers/hsi/Kconfig"
+
+source "drivers/pps/Kconfig"
+
+source "drivers/ptp/Kconfig"
+
+source "drivers/pinctrl/Kconfig"
+
+source "drivers/gpio/Kconfig"
+
+source "drivers/w1/Kconfig"
+
+source "drivers/power/Kconfig"
+
+source "drivers/hwmon/Kconfig"
+
+source "drivers/thermal/Kconfig"
+
+source "drivers/watchdog/Kconfig"
+
+source "drivers/ssb/Kconfig"
+
+source "drivers/bcma/Kconfig"
+
+source "drivers/mfd/Kconfig"
+
+source "drivers/regulator/Kconfig"
+
+source "drivers/media/Kconfig"
+
+source "drivers/video/Kconfig"
+
+source "sound/Kconfig"
+
+source "drivers/hid/Kconfig"
+
+source "drivers/usb/Kconfig"
+
+source "drivers/mmc/Kconfig"
+
+source "drivers/memstick/Kconfig"
+
+source "drivers/leds/Kconfig"
+
+source "drivers/accessibility/Kconfig"
+
+source "drivers/infiniband/Kconfig"
+
+source "drivers/edac/Kconfig"
+
+source "drivers/rtc/Kconfig"
+
+source "drivers/dma/Kconfig"
+
+source "drivers/dma-buf/Kconfig"
+
+source "drivers/dca/Kconfig"
+
+source "drivers/auxdisplay/Kconfig"
+
+source "drivers/uio/Kconfig"
+
+source "drivers/vfio/Kconfig"
+
+source "drivers/vlynq/Kconfig"
+
+source "drivers/virt/Kconfig"
+
+source "drivers/virtio/Kconfig"
+
+source "drivers/vdpa/Kconfig"
+
+source "drivers/vhost/Kconfig"
+
+source "drivers/hv/Kconfig"
+
+source "drivers/xen/Kconfig"
+
+source "drivers/greybus/Kconfig"
+
+source "drivers/comedi/Kconfig"
+
+source "drivers/staging/Kconfig"
+
+source "drivers/platform/Kconfig"
+
+source "drivers/clk/Kconfig"
+
+source "drivers/hwspinlock/Kconfig"
+
+source "drivers/clocksource/Kconfig"
+
+source "drivers/mailbox/Kconfig"
+
+source "drivers/iommu/Kconfig"
+
+source "drivers/remoteproc/Kconfig"
+
+source "drivers/rpmsg/Kconfig"
+
+source "drivers/soundwire/Kconfig"
+
+source "drivers/soc/Kconfig"
+
+source "drivers/devfreq/Kconfig"
+
+source "drivers/extcon/Kconfig"
+
+source "drivers/memory/Kconfig"
+
+source "drivers/iio/Kconfig"
+
+source "drivers/ntb/Kconfig"
+
+source "drivers/vme/Kconfig"
+
+source "drivers/pwm/Kconfig"
+
+source "drivers/irqchip/Kconfig"
+
+source "drivers/ipack/Kconfig"
+
+source "drivers/reset/Kconfig"
+
+source "drivers/phy/Kconfig"
+
+source "drivers/powercap/Kconfig"
+
+source "drivers/mcb/Kconfig"
+
+source "drivers/perf/Kconfig"
+
+source "drivers/ras/Kconfig"
+
+source "drivers/thunderbolt/Kconfig"
+
+source "drivers/android/Kconfig"
+
+source "drivers/gpu/trace/Kconfig"
+
+source "drivers/nvdimm/Kconfig"
+
+source "drivers/dax/Kconfig"
+
+source "drivers/nvmem/Kconfig"
+
+source "drivers/hwtracing/Kconfig"
+
+source "drivers/fpga/Kconfig"
+
+source "drivers/fsi/Kconfig"
+
+source "drivers/tee/Kconfig"
+
+source "drivers/mux/Kconfig"
+
+source "drivers/opp/Kconfig"
+
+source "drivers/visorbus/Kconfig"
+
+source "drivers/siox/Kconfig"
+
+source "drivers/slimbus/Kconfig"
+
+source "drivers/interconnect/Kconfig"
+
+source "drivers/counter/Kconfig"
+
+source "drivers/most/Kconfig"
+
+config AMLOGIC_DRIVER
+	bool "Amlogic Peripheral drivers"
+	default n
+	help
+	  this option is provided for control amlogic
+	  drivers, if you want to use amlogic driver
+	  please open it.
+	  Note: All amlogic driver should be placed in
+	  directory $(COMMON_DRIVERS_DIR)/drivers/
+
+config AMLOGIC_BREAK_GKI_20
+	bool "Amlogic Break GKI 2.0"
+	depends on AMLOGIC_BREAK_GKI
+	default n
+	help
+	  this option is provide for control Break GKI 2.0,
+	  if you want to break gki2.0 rule, should enable it,
+	  all break gki2.0 modify should be depends on this option
+
+if AMLOGIC_DRIVER
+config AMLOGIC_BREAK_GKI
+	bool "Amlogic Break GKI"
+	default n
+	help
+	  this option is provide for control Break GKI,
+	  if you want to debug driver temporarily, should enable it,
+	  export function or variable with this config,
+	  and the driver Kconfig depends on this option
+
+config AMLOGIC_MODIFY
+	bool "Amlogic modify for kernel code"
+	default n
+	help
+	  This option is set up for AMLOGIC modify of standard
+	  kernel source code. All modify of kernel standard code
+	  should be wrapped by this config
+
+config AMLOGIC_IN_KERNEL_MODULES
+	bool "Amlogic Drivers in build or extra build"
+	default n
+	help
+	  this option is provided for control amlogic
+	  drivers in build or extra build, if you want
+	  to in build, should enable; if want to extra
+	  build, should disable
+
+config AMLOGIC_KERNEL_VERSION
+	int "Amlogic Kernel Version"
+	default 13515
+	help
+	  kernel from android13-5.15
+	  so the default value is 13515
+	  the driver uses it to adapt different kernel versions
+
+if AMLOGIC_IN_KERNEL_MODULES
+source "$(COMMON_DRIVERS_DIR)/drivers/Kconfig"
+source "$(COMMON_DRIVERS_DIR)/sound/Kconfig"
+source "$(COMMON_DRIVERS_DIR)/samples/Kconfig"
+endif
+endif
+endmenu

@@ -1,0 +1,159 @@
+. ${ROOT_DIR}/${KERNEL_DIR}/build.config.gki.aarch64
+. ${ROOT_DIR}/${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/amlogic_utils.sh
+
+DO_NOT_STRIP_MODULES=		#strip modules
+# TOP_EXT_MODULE_COPY_BUILD=1
+# AUTO_ADD_EXT_SYMBOLS=1
+
+BUILD_INITRAMFS=${BUILD_INITRAMFS:-1}
+# LZ4_RAMDISK=${BUILD_INITRAMFS:-1}
+BUILD_SYSTEM_DLKM=
+
+MODULES_ORDER=
+# COMPRESS_MODULES=1		# Package the unstripped modules for debugging
+
+MODULES_LIST=
+MODULES_BLOCKLIST=
+VENDOR_DLKM_MODULES_LIST=
+VENDOR_DLKM_MODULES_BLOCKLIST=
+
+TRIM_UNUSED_MODULES=1
+# BUILD_BOOT_IMG=1		# Need to add dtb files to FILES, otherwise an error occurs when building boot.img, such as s4d_s905y4_ap222_drm.dtb
+BUILD_VENDOR_BOOT_IMG=1	# boot.img and dtb.img will be built only when BUILD_BOOT_IMG and BUILD_VENDOR_BOOT_IMG are set to 1
+# KERNEL_BINARY=Image.lz4	# Need to set the value of AA, otherwise an error occurs when building boot.img,
+				# whether the value is Image.lz4 or vmlinux is uncertain due to different descriptions
+if [[ -n ${ANDROID_PROJECT} ]]; then
+	BUILD_DTBO_IMG=1	# Android requires dtbo
+	BUILD_GKI_BOOT_IMG_GZ_SIZE=67108864
+fi
+
+if [[ -n ${FAST_BUILD} ]]; then
+	SKIP_MRPROPER=1
+	LZ4_RAMDISK_COMPRESS_ARGS="--fast"
+	LTO="thin"
+	SKIP_CP_KERNEL_HDR=1
+	BUILD_INITRAMFS=0
+	BUILD_SYSTEM_DLKM=0
+	BUILD_BOOT_IMG=
+	BUILD_VENDOR_BOOT_IMG=
+	BUILD_VENDOR_KERNEL_BOOT=
+	BUILD_GKI_ARTIFACTS=
+fi
+
+DEFCONFIG=amlogic_gki_defconfig
+GKI_BASE_CONFIG=${KERNEL_DIR}/arch/${ARCH}/configs/gki_defconfig
+KCONFIG_DEFCONFIG=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/configs/${DEFCONFIG}
+FRAGMENT_CONFIG=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/configs/amlogic_gki.fragment
+FRAGMENT_CONFIG_GKI10=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/configs/amlogic_gki.10
+FRAGMENT_CONFIG_DEBUG=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/configs/amlogic_gki.debug
+FRAGMENT_CONFIG_UPGRADE=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/configs/amlogic_upgrade.defconfig
+
+PRE_DEFCONFIG_CMDS="pre_defconfig_cmds"
+POST_DEFCONFIG_CMDS="post_defconfig_cmds"
+
+MAKE_GOALS="
+	${MAKE_GOALS}
+"
+
+FILES="
+	${FILES}
+"
+
+if [[ -n ${ANDROID_PROJECT} ]]; then
+MAKE_GOALS="
+	${MAKE_GOALS}
+	Image.gz
+	android_overlay_dt.dtbo
+	${MAKE_GOALS_ANDROID}
+"
+
+FILES="
+	${FILES}
+	arch/arm64/boot/Image.gz
+	android_overlay_dt.dtbo
+	${FILES_ANDROID}
+"
+for device_tree in ${KERNEL_DEVICETREE}; do
+MAKE_GOALS="
+	${MAKE_GOALS}
+	${device_tree}.dtb
+"
+FILES="
+	${FILES}
+	${device_tree}.dtb
+"
+done
+
+#	s4d_s905y4_ap222_drm.dtb	# configure in file build.config.meson.arm64.trunk
+else
+MAKE_GOALS="
+	${MAKE_GOALS}
+	dtbs
+"
+
+FILES="
+	${FILES}
+"
+fi
+
+DTS_EXT_DIR=${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/customer/arch/${ARCH}/boot/dts
+DTC_INCLUDE=${ROOT_DIR}/${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/include
+
+EXT_MODULES="
+	${EXT_MODULES}
+	${EXT_MODULES_ANDROID}
+"
+
+EXT_MODULES_CONFIG="
+	${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/scripts/amlogic/ext_modules_config
+"
+
+EXT_MODULES_PATH="
+	${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/scripts/amlogic/ext_modules_path
+"
+
+TYPE_MODULE_SELECT_MODULE="
+	${TYPE_MODULE_SELECT_MODULE_ANDROID}
+"
+
+if [[ `grep "CONFIG_AMLOGIC_IN_KERNEL_MODULES=n" ${ROOT_DIR}/${FRAGMENT_CONFIG}` ]]; then
+	EXT_MODULES="
+		${KERNEL_DIR}/${COMMON_DRIVERS_DIR}/drivers
+		${EXT_MODULES}
+	"
+fi
+
+POST_KERNEL_BUILD_CMDS="prepare_module_build"
+EXTRA_CMDS="extra_cmds"
+
+if [[ ${GKI_CONFIG} == gki_20 ]]; then
+	ADDITIONAL_KMI_SYMBOL_LISTS="
+		${ADDITIONAL_KMI_SYMBOL_LISTS}
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic
+	"
+elif [[ ${GKI_CONFIG} == gki_10 ]]; then
+	ADDITIONAL_KMI_SYMBOL_LISTS="
+		${ADDITIONAL_KMI_SYMBOL_LISTS}
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic.10
+	"
+elif [[ ${GKI_CONFIG} == gki_debug ]]; then
+	ADDITIONAL_KMI_SYMBOL_LISTS="
+		${ADDITIONAL_KMI_SYMBOL_LISTS}
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic.10
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic.debug
+	"
+fi
+
+if [[ `grep "CONFIG_AMLOGIC_BREAK_GKI=y" ${ROOT_DIR}/${FRAGMENT_CONFIG}` ]]; then
+	ADDITIONAL_KMI_SYMBOL_LISTS="
+		${ADDITIONAL_KMI_SYMBOL_LISTS}
+		${COMMON_DRIVERS_DIR}/android/abi_gki_aarch64_amlogic.illegal
+	"
+fi
+
+if [[ -n ${UPGRADE_PROJECT} ]]; then
+	KMI_SYMBOL_LIST_STRICT_MODE=""
+	TRIM_NONLISTED_KMI=""
+fi

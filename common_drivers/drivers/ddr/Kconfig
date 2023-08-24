@@ -1,0 +1,3 @@
+config DDR_SSC_TUNING
+	bool "enable to support tuning SSC in factory menu"
+	default y

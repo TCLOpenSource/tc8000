@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+menu "Character devices"
+
+source "$(COMMON_DRIVERS_DIR)/drivers/char/hw_random/Kconfig"
+
+endmenu

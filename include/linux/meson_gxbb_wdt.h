@@ -1,0 +1,1 @@
+extern void resource_meson_wdt_stop(void);

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+config AMLOGIC_POWER
+	tristate "Amlogic power related driver support"
+	default n
+	select PM_GENERIC_DOMAINS
+	help
+	  this config enables to use amlogic power management driver
+	  Say y here if you want power related driver(pmu/dvfs) support
+	  The use of select here is due to the PM_GENERIC_DOMAINS set by gki's QCOM walk

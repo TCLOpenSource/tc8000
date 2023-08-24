@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+if IIO
+
+source "$(COMMON_DRIVERS_DIR)/drivers/iio/adc/Kconfig"
+
+endif # IIO

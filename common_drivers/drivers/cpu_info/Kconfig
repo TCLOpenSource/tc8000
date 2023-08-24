@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+config AMLOGIC_CPU_INFO
+	tristate "Amlogic chipid"
+	depends on AMLOGIC_SECMON
+	depends on MFD_SYSCON
+	default n
+	help
+	  say y to enable Amlogic chipid driver
+          include to driver
+	  cpu info, access with smccc
+	  cpu version, access with reg
+
+config AMLOGIC_SHOW_CPU_CHIPID
+	bool "Amlogic show cpu chipid in /proc/cpu_chipid"
+	depends on AMLOGIC_CPU_INFO
+	default n
+	help
+	  show cpu chipid in /proc/cpuinfo

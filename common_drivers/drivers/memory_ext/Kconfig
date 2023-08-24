@@ -1,0 +1,197 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+menuconfig AMLOGIC_MEMORY_EXTEND
+	bool "AMLOGIC memory extend support"
+	depends on AMLOGIC_DRIVER
+	depends on AMLOGIC_BREAK_GKI
+	depends on AMLOGIC_BREAK_GKI_20
+	select SWIOTLB
+	select DMA_RESTRICTED_POOL
+	default n
+	help
+		Amlogic memory extend is drivers which extend for memory management
+		functions, can be used for memory debug or other features.
+
+config AMLOGIC_PAGE_TRACE
+	bool "Amlogic trace for page allocate"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	depends on KALLSYMS
+	depends on !NUMA_BALANCING
+	default n
+	help
+		Amlogic page trace will record function address of caller for page
+		allocate/free, according with allocate flags and order. trace
+		information is stored in a pre-allocated memory block. And can be shown
+		with allocate page count information of each caller functions from
+		/proc/pagetrace
+
+config AMLOGIC_PAGE_TRACE_INLINE
+	bool "page trace inline into page flags"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_PAGE_TRACE
+	depends on 64BIT
+	depends on !KASAN_HW_TAGS && !KASAN_SW_TAGS
+	default n
+	help
+		This feature enable to inline page trace into high 32bits of
+		page->flags on 64 bit kernel. Because other total page flags
+		are less than 32bit, so It can help to save memory when
+		use page trace. But it conflict with KASAN tags, so when kasan
+		tags enabled, this feature will be auto disabled
+
+config AMLOGIC_SLAB_TRACE
+	bool "Amlogic trace for slab usage"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on SLUB
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		Amlogic slab trace will record function address of caller for
+		slab allocate/free(kmalloc-xxxx only). trace information is
+		stored in rb tree. And can be shown with allocate size
+		information of each caller functions from /proc/slabtrace
+
+config AMLOGIC_CMA
+	bool "Amlogic CMA change"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	depends on CMA
+	default n
+	help
+		Amlogic CMA optimization for cma alloc/free problems
+		Including policy change of CMA usage
+
+config AMLOGIC_MEM_DEBUG
+	bool "Amlogic debug mem"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		Memory debug which hacking to kernel mm source.
+
+config AMLOGIC_STACKPROTECTOR
+	bool "Amlogic stack protector"
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		This config is used to disable CONFIG_STACKPROTECTOR
+		if enabled AMLOGIC_VMAP. CONFIG_STACKPROTECTOR have
+		bad effect to save stack usage.
+
+config AMLOGIC_VMAP
+	bool "Amlogic kernel stack"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	depends on AMLOGIC_STACKPROTECTOR
+	default n
+	help
+		This config is used to enable amlogic kernel stack
+		usage optimization with vmalloc. It depends on
+		AMLOGIC_MEMORY_EXTEND. This config only opened
+		on 64 bit platform.
+
+config AMLOGIC_USER_FAULT
+	bool "Amlogic user fault helper"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		show more information when catch user fault. Including:
+		memory around all registers
+		maps with pc/lr
+		pfn for all virtual address of registers
+
+config AMLOGIC_ZSTD
+	tristate "Amlogic zstd optimize"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		This config is an optimization of zstd,
+		in zram, to improve the compression ratio
+		and save memory
+
+config AMLOGIC_MEMORY_STAT
+	bool "Amlogic stat memory info"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		This config use to stat memory info,
+		include count free pages in migrate
+		list, print more memory information.
+
+config AMLOGIC_CMA_DIS
+	bool "Amlogic CMA disable change fot gki"
+	depends on AMLOGIC_MEMORY_EXTEND
+	depends on CMA
+	default n
+	help
+		Amlogic disable CMA optimization for gki needs.
+
+config AMLOGIC_MEMORY_OPT
+	bool "Amlogic memory optimization support"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		Amlogic memory optimization support,
+		distinguish from AMLOGIC_MEMORY_EXTEND,
+		because of gki requirements, enable in
+		aarch32.
+
+config AMLOGIC_PIN_LOCKED_FILE
+	bool "Amlogic pin locked file"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		If we pin a file in android, the whole daa of this
+		file will be loaded to DDR, but most of these data
+		may not be used, this caused memory waste.
+		delay mark mlocked flags for unevictable pages until
+		it has been faulted.
+
+config AMLOGIC_PIN_LOCKED_FILE_V2
+	bool "Amlogic pin locked file new version"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		If we pin a file in android, the whole daa of this
+		file will be loaded to DDR, but most of these data
+		may not be used, this caused memory waste.
+		delay mark mlocked flags for unevictable pages until
+		it has been faulted.
+
+config AMLOGIC_FIXED_AREA_CMA
+	tristate "Amlogic fixed area cma"
+	default n
+	help
+		Asymmetric memory system, provide an interface for
+		allocating memory in different areas.
+
+config AMLOGIC_PCIE_DMA_OPS
+	tristate "Amlogic PCIE dma_ops"
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		custom a dma_ops to limit the memory for PCIE device
+		operations to a fixed area
+
+config AMLOGIC_FAKE_SMMU
+	tristate "Amlogic fake smmu"
+	depends on AMLOGIC_PCIE_DMA_OPS
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		Register a fake smmu device to replace ops for 64bit
+
+config AMLOGIC_CMA_SHRINKER
+	tristate "Amlogic cma shrinker"
+	depends on AMLOGIC_MEMORY_EXTEND
+	default n
+	help
+		lmkd may not trigger if most free memory are CMA memory,
+		so register cma shrinker to kill process.

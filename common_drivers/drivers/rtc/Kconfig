@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+comment "RTC drivers"
+
+if RTC_CLASS
+
+config AMLOGIC_RTC
+	tristate "Platform rtc drivers support"
+	default n
+	help
+	  rtc drivers support
+	  select y for built-in
+	  select m for ko
+	  select n for disable
+
+config AMLOGIC_RTC_DRV_MESON_VRTC
+	bool "Amlogic Meson Virtual RTC"
+	depends on AMLOGIC_RTC
+	default n
+	help
+	  If you say yes here you will get support for the
+	  Virtual RTC of Amlogic SoCs.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called rtc-meson-vrtc.
+
+config AMLOGIC_MESON_RTC
+	bool "Amlogic Meson RTC driver"
+	depends on AMLOGIC_RTC
+	default n
+	help
+	  This is the Amlogic rtc driver.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called meson-rtc.
+
+endif # RTC_CLASS

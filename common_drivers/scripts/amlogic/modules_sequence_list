@@ -1,0 +1,65 @@
+RAMDISK_MODULES_LOAD_LIST=(
+	amlogic-uart
+	amlogic-gkitool
+	amlogic-memory-debug
+	amlogic-secmon
+	amlogic-clk
+	amlogic-gpio
+	amlogic-pinctrl
+	amlogic-mailbox
+	amlogic-pwm
+	pwm-regulator
+	amlogic-power
+	amlogic-cpuinfo
+	amlogic-cpufreq
+	amlogic-reset
+	amlogic-efuse-unifykey
+	amlogic-mmc
+	amlogic-i2c.ko
+	amlogic-spi.ko
+	amlogic-rng.ko
+	amlogic-tee.ko
+	videobuf-core.ko
+	dvb-core.ko
+	amlogic-pm.ko
+	amlogic-input.ko
+	amlogic-watchdog.ko
+	aml-dvb.ko
+	aml_media.ko
+	amlogic-adc.ko
+	amlogic-rtc-virtual.ko
+	amlogic-audio-utils.ko
+	amlogic-thermal.ko
+	amlogic-usb.ko
+	amlogic-irblaster.ko
+	amlogic-inphy.ko
+	aml_drm.ko
+)
+
+VENDOR_MODULES_LOAD_FIRST_LIST=(
+	amlogic-crypto-dma
+	amlogic-usb.ko
+	amlogic-wireless.ko
+	amlogic_pcie_v2_host.ko
+)
+
+VENDOR_MODULES_LOAD_LAST_LIST=(
+)
+
+RECOVERY_MODULES_LOAD_LIST=(
+	dwc_otg.ko
+	ntfs3.ko
+)
+
+MODULES_LOAD_BLACK_LIST=(
+	${VENDOR_MODULES_LOAD_BLACK_LIST[@]}
+	${OEM_MODULES_LOAD_BLACK_LIST[@]}
+)
+
+COMMON_MODULES_SERVICE_LOAD_LIST=(
+)
+
+MODULES_SERVICE_LOAD_LIST=(
+	${ANDROID_PROJECT_MODULES_SERVICE_LOAD_LIST[@]}
+	${COMMON_MODULES_SERVICE_LOAD_LIST[@]}
+)

@@ -1,0 +1,97 @@
+config AMLOGIC_DEBUG
+	tristate "AMLOGIC kernel debug"
+	default n
+	help
+	  This option is set up for Amlogic kernel debug,
+	  Modifying the source code, we will use the AMLOGIC_
+	  prefix.If you want to add debug code to the kernel,please
+	  use this option switch it.
+
+config AMLOGIC_BGKI_DEBUG_MISC
+	bool "Amlogic Debug Builtin Code"
+	depends on AMLOGIC_DEBUG
+	depends on AMLOGIC_BREAK_GKI
+	depends on AMLOGIC_BREAK_GKI_20
+	default n
+	help
+	  Amlogic debug code must builtin
+	  Enable if doubt
+
+config AMLOGIC_DEBUG_ATRACE
+	bool "Amlogic Kernel ATrace"
+	depends on AMLOGIC_DEBUG
+	depends on TRACING
+	default n
+	help
+	  Add android atrace compatible function.
+	  Support Tags
+
+config AMLOGIC_BOOT_TIME
+	bool "AMLOGIC boot time optimi zation"
+	depends on AMLOGIC_BREAK_GKI
+	depends on AMLOGIC_BREAK_GKI_20
+	default n
+	help
+	  This option is set up for Amlogic boot time optimization,
+	  if you want to optimize boot time, please set this config to y.
+
+config AMLOGIC_DEBUG_PRINTK
+	tristate "Amlogic printk support"
+	depends on AMLOGIC_BREAK_GKI_20
+	depends on PRINTK_CALLER
+	default n
+	help
+	  if you want to print information such as cpu irq,
+	  please use this option switch it.
+
+config AMLOGIC_BGKI_DEBUG_IOTRACE
+	bool "Amlogic ftrace pstore debug"
+	depends on AMLOGIC_BREAK_GKI
+	depends on AMLOGIC_BREAK_GKI_20
+	select PSTORE_FTRACE
+	default n
+	help
+	  Dump function call and register access to ramoops after watchdog
+	  reboot.
+	  Enable if doubt
+
+config AMLOGIC_DEBUG_FILE
+	bool "Amlogic dump log to debug file"
+	default n
+	help
+	  Provide some interfaces for dumping log to debug file
+
+config AMLOGIC_DEBUG_TEST
+	tristate "Amlogic debug test on init"
+	depends on AMLOGIC_DEBUG
+	default n
+	help
+	  auto test on debug init
+
+config AMLOGIC_DEBUG_HLD
+	bool "Amlogic hardlockup detector support"
+	depends on AMLOGIC_DEBUG
+	default n
+	help
+	  if you want to hardlockup detector support,
+	  please use this option switch it.
+
+config AMLOGIC_HOTPLUG_ARM_CPU0
+	bool "Support VTS thermal 1.0 test on arm"
+	default n
+	help
+	  if build with arm set this config to y for vts thermal 1.0 test,
+	  set config to n for arm64
+
+config AMLOGIC_AUDIO_UTILS
+	tristate "Amlogic audio utils"
+	default n
+	help
+	  add some debug tools
+
+config AMLOGIC_GKI_CONFIG
+	bool "Meson gki config"
+	depends on AMLOGIC_DEBUG
+	default n
+	help
+	  support GKI config enable or not
